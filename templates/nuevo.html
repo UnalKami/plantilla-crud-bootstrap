@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="css/estilo.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h3 class="my-3">Nuevo Registro de Persona</h3>
+
+            <form action="/nuevo" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" class="form-control" id="dni" name="dni" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="id_tipo_documento" class="form-label">Tipo de Documento</label>
+                    <select id="id_tipo_documento" name="id_tipo_documento" class="form-select" required>
+                        <option value="">Seleccionar</option>
+                        {% for tipo in tipos_documento %}
+                        <option value="{{ tipo['id_tipo_documento'] }}">{{ tipo['nombre_tipo_documento'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="nombre1" class="form-label">Primer Nombre</label>
+                    <input type="text" class="form-control" id="nombre1" name="nombre1" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="nombre2" class="form-label">Segundo Nombre</label>
+                    <input type="text" class="form-control" id="nombre2" name="nombre2">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="apellido1" class="form-label">Primer Apellido</label>
+                    <input type="text" class="form-control" id="apellido1" name="apellido1" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="apellido2" class="form-label">Segundo Apellido</label>
+                    <input type="text" class="form-control" id="apellido2" name="apellido2">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="id_residencia" class="form-label">Residencia (ID Vivienda)</label>
+                    <select id="id_residencia" name="id_residencia" class="form-select" required>
+                        <option value="">Seleccionar</option>
+                        {% for vivienda in viviendas %}
+                        <option value="{{ vivienda['id_vivienda'] }}">{{ vivienda['direccion'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="mayor_de_edad" class="form-label">Mayor de Edad</label>
+                    <select id="mayor_de_edad" name="mayor_de_edad" class="form-select" required>
+                        <option value="1">Sí</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="id_cabeza_familia" class="form-label">ID Cabeza de Familia (Opcional)</label>
+                    <select id="id_cabeza_familia" name="id_cabeza_familia" class="form-select">
+                        <option value="">Seleccionar</option>
+                        {% for persona in personas %}
+                        <option value="{{ persona['id_persona'] }}">{{ persona['nombre1'] }} {{ persona['apellido1'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <a href="/" class="btn btn-secondary">Regresar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-body-tertiary">
+        <div class="container">
+            <span class="text-body-secondary"> 2024 | Sistema de Personas</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
