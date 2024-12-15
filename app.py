@@ -126,5 +126,84 @@ def editar_empleado(id_persona):
     cursor.close()
 
     return render_template('edita.html', empleado=empleado, tipos_documento=tipos_documento)
+
+
+
+@app.route('/nuevo_departamento', methods=['GET', 'POST'])
+def nuevo_departamento():
+    cursor = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        # Capturar los datos del formulario
+        nombre_departamento = request.form['nombre_departamento']
+        id_gobernador = request.form['id_gobernador'] or None
+
+        # Insertar el nuevo departamento en la base de datos
+        cursor.execute(
+            """
+            INSERT INTO DEPARTAMENTO (nombre_departamento, id_gobernador)
+            VALUES (%s, %s)
+            """,
+            (nombre_departamento, id_gobernador)
+        )
+
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('index'))
+
+    # Obtener la lista de personas para asignar como gobernador
+    cursor.execute("SELECT id_persona, nombre1, apellido1 FROM PERSONA")
+    personas = cursor.fetchall()
+
+    cursor.close()
+    return render_template('departamento.html', personas=personas)
+
+@app.route('/nuevo_municipio', methods=['GET', 'POST'])
+def nuevo_municipio():
+    cursor = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        # Capturar los datos del formulario
+        nombre_municipio = request.form['nombre_municipio']
+        id_departamento = request.form['id_departamento']
+
+        # Insertar el nuevo municipio en la base de datos
+        cursor.execute(
+            """
+            INSERT INTO MUNICIPIO (nombre_municipio, id_departamento)
+            VALUES (%s, %s)
+            """,
+            (nombre_municipio, id_departamento)
+        )
+
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('index'))
+
+    # Obtener la lista de departamentos para asignar al municipio
+    cursor.execute("SELECT id_departamento, nombre_departamento FROM DEPARTAMENTO")
+    departamentos = cursor.fetchall()
+
+    cursor.close()
+    return render_template('municipio.html', departamentos=departamentos)
+
+@app.route('/ver_departamentos', methods=['GET'])
+def ver_departamentos():
+    cursor = mysql.connection.cursor()
+
+    # Consultar los departamentos y sus gobernadores
+    cursor.execute(
+        """
+        SELECT d.id_departamento, d.nombre_departamento, p.nombre1, p.apellido1
+        FROM DEPARTAMENTO d
+        LEFT JOIN PERSONA p ON d.id_gobernador = p.id_persona
+        """
+    )
+    departamentos = cursor.fetchall()
+
+    cursor.close()
+    return render_template('ver_departamentos.html', departamentos=departamentos)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
